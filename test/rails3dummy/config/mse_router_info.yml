@@ -1,0 +1,25 @@
+# UMass Transit Microservices Engine
+# Router API Data Endpoint Configuration
+
+# REQUIRED field
+# The name of the microservice
+name: ''
+
+# REQUIRED field
+# The URI for the site hosting the microservice
+# remember to add http:// to the beginning of your uri
+uri: ''
+
+# REQUIRED field
+# Verification token
+security_token: ''
+
+# REQUIRED Field
+# Endpoint of Microservices router
+# Make sure you do not add a slash to this, and remember to add
+# http:// to the beginning of your uri.
+router_uri: ''
+
+# OPTIONAL field (leave blank if not applicable)
+# The models that the service can give info on
+accessible_models: []

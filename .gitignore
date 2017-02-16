@@ -1,0 +1,17 @@
+*.gem
+*.rbc
+.rspec
+/test/dummy/log/*.log
+/test/dummy/tmp
+*.sqlite3
+/coverage/*
+!/coverage/.last_run.json
+/gemfiles/*.gemfile.lock
+
+# dotenv
+# TODO Comment out this rule if environment variables can be committed
+.env
+
+Gemfile.lock
+# these should all be checked in to normalize the environment:
+# .ruby-version, .ruby-gemset

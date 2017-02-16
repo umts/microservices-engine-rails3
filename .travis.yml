@@ -1,0 +1,34 @@
+language: ruby
+rvm:
+  - 2.3.1
+  - 1.9.3
+addons:
+  codeclimate:
+    repo_token: 22840649ef0d6a85c80f7276acbb377b5baee4938f1d15741f34627245c84c92
+env: 
+  global: 
+    - RAILS_ENV=test
+  matrix:
+    - 'RAILS_VERSION=3'
+    - 'RAILS_VERSION=4'
+    - 'RAILS_VERSION=5'
+install:
+  - scripts/rails_3_check.sh
+before_script:
+  - bin/rails g install microservices-engine
+  - scripts/travis.sh
+script:
+  - bundle exec rspec
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+    recipients: programmers@admin.umass.edu
+matrix:
+  exclude:
+    - rvm: 2.3.1
+      env: 'RAILS_VERSION=3'
+    - rvm: 1.9.3
+      env: 'RAILS_VERSION=4'
+    - rvm: 1.9.3
+      env: 'RAILS_VERSION=5'

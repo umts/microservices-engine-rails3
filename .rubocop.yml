@@ -1,0 +1,17 @@
+inherit_from: .rubocop_todo.yml
+AllCops:
+  Exclude:
+    - 'test/dummy/**/*'
+    - 'tmp/**/*'
+    - 'spec/fixtures/**/*'
+    - 'vendor/**/*'
+  TargetRubyVersion: 2.3
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Max: 8
