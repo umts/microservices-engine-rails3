@@ -1,4 +1,4 @@
-# UMTS MicroservicesEngine
+# UMTS MicroservicesEngineRails3
 
 [![Build Status](https://travis-ci.org/umts/microservices-engine.svg?branch=master)](https://travis-ci.org/umts/microservices-engine)
 [![Test Coverage](https://codeclimate.com/github/umts/microservices-engine/badges/coverage.svg)](https://codeclimate.com/github/umts/microservices-engine/coverage)
@@ -8,6 +8,8 @@
 ## About
 
 This is a gem / engine designed to provide simplistic inter-service communication between various UMTS (UMass Transportation Services) microservices. Not designed to be used in an independent environment outside of the UMTS office, but you are welcome to try.
+### Rails version supported:
+Rails 3
 
 [See our RubyGems page here](https://rubygems.org/gems/umts-microservices-engine)
 
