@@ -3,7 +3,7 @@ require 'net/http'
 require 'net/https'
 require 'microservices_engine/engine' if defined? Rails
 
-module MicroservicesEngine
+module MicroservicesEngineRails3
   class << self
     # Setter method for the `build` portion of the engine, includes various validations
     def build=(b)
