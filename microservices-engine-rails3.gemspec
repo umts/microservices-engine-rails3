@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 
   s.test_files = Dir['spec/**/*']
 
-  s.add_dependency 'rails', '>= 3.0', '<6.0'
+  s.add_dependency 'rails', '~> 3.0'
 
   s.add_development_dependency 'rspec-rails', '~> 3.5'
   s.add_development_dependency 'webmock', '~> 2.1'

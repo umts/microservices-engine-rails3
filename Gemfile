@@ -11,21 +11,13 @@ gemspec
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
-case ENV['RAILS_VERSION']
-when '3'
-  eval_gemfile ::File.join(::File.dirname(__FILE__), 'gemfiles/rails_3.gemfile')
-when '4'
-  eval_gemfile ::File.join(::File.dirname(__FILE__), 'gemfiles/rails_4.gemfile')
-when '5'
-  eval_gemfile ::File.join(::File.dirname(__FILE__), 'gemfiles/rails_5.gemfile')
-end
+gem "rack", "< 2"
+gem "rails", "3.2.21"
 
 group :development do
   gem 'bundler'
   gem 'rake'
-end
-
-group :newruby do
-  gem 'pry-byebug'
-  gem 'rubocop', '~> 0.45'
+  gem 'pry-debugger'
+  gem "webmock", '1.24.6'
+  gem "addressable", '< 2.5.0'
 end
