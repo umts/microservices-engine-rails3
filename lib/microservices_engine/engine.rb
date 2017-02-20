@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-module MicroservicesEngine
+module MicroservicesEngineRails3
   class Engine < ::Rails::Engine
-    isolate_namespace MicroservicesEngine
+    isolate_namespace MicroservicesEngineRails3
 
     config.generators do |g|
       g.test_framework :rspec
