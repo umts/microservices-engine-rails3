@@ -3,7 +3,7 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 
 Bundler.require(*Rails.groups)
-require 'microservices_engine'
+require 'microservices_engine_rails3'
 
 module Rails3dummy
   class Application < Rails::Application
