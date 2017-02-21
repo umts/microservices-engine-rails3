@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require_dependency 'microservices_engine/application_controller'
 
-module MicroservicesEngine
+module MicroservicesEngineRails3
   module V1
     class DataController < ApplicationController
       def register
@@ -66,12 +66,12 @@ module MicroservicesEngine
       private
 
       def verify_token(token)
-        raise SecurityError, '(Stub) Invalid Token' unless MicroservicesEngine.valid_token?(token)
+        raise SecurityError, '(Stub) Invalid Token' unless MicroservicesEngineRails3.valid_token?(token)
       end
 
       def verify_build(build)
         # The build= method already has verification built-in
-        MicroservicesEngine.build = build
+        MicroservicesEngineRails3.build = build
       end
     end
   end

@@ -2,14 +2,14 @@
 require 'rails_helper'
 require 'mse_spec_helper'
 
-describe MicroservicesEngine::V1::DataController, type: :controller do
-  routes { MicroservicesEngine::Engine.routes }
+describe MicroservicesEngineRails3::V1::DataController, type: :controller do
+  routes { MicroservicesEngineRails3::Engine.routes }
   def setup
-    @routes = MicroservicesEngine::Engine.routes
+    @routes = MicroservicesEngineRails3::Engine.routes
   end
 
   before(:each) do
-    MicroservicesEngine.build = '1.1.1'
+    MicroservicesEngineRails3.build = '1.1.1'
     @data = build_basic_data
     @changed_data = @data.deep_dup # A version of data that is changed for tests
   end
@@ -42,7 +42,7 @@ describe MicroservicesEngine::V1::DataController, type: :controller do
     end
 
     # The request updates the build version properly
-    describe 'updating MicroservicesEngine.build' do
+    describe 'updating MicroservicesEngineRails3.build' do
       context 'failing builds' do
         failing_semantic_builds.each do |failing_build|
           it "fails with older version #{failing_build}" do
@@ -56,9 +56,9 @@ describe MicroservicesEngine::V1::DataController, type: :controller do
         passing_semantic_builds.each do |passing_build|
           it "passes with newer version #{passing_build}" do
             change_build(passing_build, @changed_data)
-            expect(MicroservicesEngine.build).to eq('1.1.1')
+            expect(MicroservicesEngineRails3.build).to eq('1.1.1')
             process :register, method: :post, params: @changed_data
-            expect(MicroservicesEngine.build).to eq(passing_build)
+            expect(MicroservicesEngineRails3.build).to eq(passing_build)
           end
         end
       end
@@ -69,7 +69,7 @@ describe MicroservicesEngine::V1::DataController, type: :controller do
     describe 'resulting Connection models' do
       before(:each) do
         @extract = ->(d, key) { d['content'].collect { |c| c[key] } }
-        @connection = MicroservicesEngine::Connection
+        @connection = MicroservicesEngineRails3::Connection
       end
 
       context 'before the request' do
