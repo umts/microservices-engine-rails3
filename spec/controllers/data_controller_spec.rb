@@ -2,16 +2,18 @@
 require 'rails_helper'
 require 'mse_spec_helper'
 
-describe MicroservicesEngineRails3::V1::DataController, type: :controller do
-  routes { MicroservicesEngineRails3::Engine.routes }
+describe MicroservicesEngine::V1::DataController, type: :controller do
+  routes { MicroservicesEngine::Engine.routes }
   def setup
-    @routes = MicroservicesEngineRails3::Engine.routes
+    @routes = MicroservicesEngine::Engine.routes
   end
 
   before(:each) do
-    MicroservicesEngineRails3.build = '1.1.1'
+    MicroservicesEngine.build = '1.1.1'
     @data = build_basic_data
-    @changed_data = @data.deep_dup # A version of data that is changed for tests
+    # change this variable for tests. deep_dup doesn't work correctly
+    # in rails 3, so cannot use that.
+    @changed_data = build_basic_data
   end
   let :submit do
     post :register, @data
@@ -28,7 +30,7 @@ describe MicroservicesEngineRails3::V1::DataController, type: :controller do
       it 'accepts valid token' do
         # 1. Expect submitting the data to not cause any issues
 
-        expect { process :register, method: :post, params: @data }.not_to raise_error
+        expect{ submit }.not_to raise_error
       end
 
       # This test is disabled until the router implements the appropriate logic
@@ -42,12 +44,12 @@ describe MicroservicesEngineRails3::V1::DataController, type: :controller do
     end
 
     # The request updates the build version properly
-    describe 'updating MicroservicesEngineRails3.build' do
+    describe 'updating MicroservicesEngine.build' do
       context 'failing builds' do
         failing_semantic_builds.each do |failing_build|
           it "fails with older version #{failing_build}" do
             change_build(failing_build, @changed_data)
-            expect { process :register, method: :post, params: @changed_data }.to raise_error(RuntimeError)
+            expect{ post :register, @changed_data }.to raise_error(RuntimeError)
           end
         end
       end
@@ -56,9 +58,9 @@ describe MicroservicesEngineRails3::V1::DataController, type: :controller do
         passing_semantic_builds.each do |passing_build|
           it "passes with newer version #{passing_build}" do
             change_build(passing_build, @changed_data)
-            expect(MicroservicesEngineRails3.build).to eq('1.1.1')
-            process :register, method: :post, params: @changed_data
-            expect(MicroservicesEngineRails3.build).to eq(passing_build)
+            expect(MicroservicesEngine.build).to eq('1.1.1')
+            post :register, @changed_data
+            expect(MicroservicesEngine.build).to eq(passing_build)
           end
         end
       end
@@ -68,8 +70,7 @@ describe MicroservicesEngineRails3::V1::DataController, type: :controller do
     # objects as expected
     describe 'resulting Connection models' do
       before(:each) do
-        @extract = ->(d, key) { d['content'].collect { |c| c[key] } }
-        @connection = MicroservicesEngineRails3::Connection
+        @connection = MicroservicesEngine::Connection
       end
 
       context 'before the request' do
@@ -80,7 +81,7 @@ describe MicroservicesEngineRails3::V1::DataController, type: :controller do
 
       describe 'new' do
         before(:each) do
-          process :register, method: :post, params: @data
+          post :register, @data
         end
 
         it 'generates the models' do
@@ -88,15 +89,15 @@ describe MicroservicesEngineRails3::V1::DataController, type: :controller do
         end
 
         it 'generated the names' do
-          expect(@connection.all.map(&:name)).to eq(@extract.call(@data, 'name'))
+          expect(@connection.all.map(&:name)).to eq(@data['content'].map{ |c| c['name'] })
         end
 
         it 'generated the urls' do
-          expect(@connection.all.map(&:url)).to eq(@extract.call(@data, 'url'))
+          expect(@connection.all.map(&:url)).to eq(@data['content'].map{ |c| c['url'] })
         end
 
         it 'generated the objects' do
-          expect(@connection.all.map(&:object)).to eq(@extract.call(@data, 'object'))
+          expect(@connection.all.map(&:object)).to eq(@data['content'].map{ |c| c['object'] })
         end
 
         it 'adds model when new data appears' do
@@ -107,7 +108,7 @@ describe MicroservicesEngineRails3::V1::DataController, type: :controller do
           }
           @changed_data['content'].append(new_data)
 
-          expect { process :register, method: :post, params: @changed_data }
+          expect { post :register, @changed_data }
             .to change { @connection.count }
             .by(1)
         end
@@ -115,40 +116,40 @@ describe MicroservicesEngineRails3::V1::DataController, type: :controller do
 
       describe 'editing' do
         before(:each) do
-          process :register, method: :post, params: @data
+          submit
         end
 
         it 'updates the name' do
           @changed_data['content'][0]['name'] = 'Potatoes'
-          expect { process :register, method: :post, params: @changed_data }
+          expect { post :register, @changed_data }
             .to change { @connection.all.map(&:name) }
-            .from(@extract.call(@data, 'name'))
-            .to(@extract.call(@changed_data, 'name'))
+            .from(@data['content'].map{ |c| c['name'] })
+            .to(@changed_data['content'].map{ |c| c['name'] })
         end
 
         it 'updates the url' do
           @changed_data['content'][0]['url'] = 'pota://toe.s/'
-          expect { process :register, method: :post, params: @changed_data }
+          expect { post :register, @changed_data }
             .to change { @connection.all.map(&:url) }
-            .from(@extract.call(@data, 'url'))
-            .to(@extract.call(@changed_data, 'url'))
+            .from(@data['content'].map{ |c| c['url'] })
+            .to(@changed_data['content'].map{ |c| c['url'] })
         end
 
         it 'swaps information to other model' do
           @changed_data['content'][0]['object'] = 'SomeOtherObject'
-          expect { process :register, method: :post, params: @changed_data }
+          expect { post :register, @changed_data }
             .not_to change { @connection.count }
         end
       end
 
       describe 'removing' do
         before(:each) do
-          process :register, method: :post, params: @data
+          post :register, @data
         end
 
         it 'removes the model' do
           @changed_data['content'].delete_at(0)
-          expect { process :register, method: :post, params: @changed_data }
+          expect { post :register, @changed_data }
             .to change { @connection.count }
             .by(-1)
         end
