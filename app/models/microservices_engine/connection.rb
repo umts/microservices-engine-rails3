@@ -7,7 +7,7 @@ module MicroservicesEngine
     attr_accessible :name, :url, :object
 
     def self.get(resource, path, params = {})
-      conn = Connection.find_by(object: resource.to_s) # Does :abc match "abc"?
+      conn = Connection.where(object: resource.to_s).first # Does :abc match "abc"?
 
       # resource is :trips, path is [:generate_random_trips]
       full_path = path.unshift(resource).join('/')
