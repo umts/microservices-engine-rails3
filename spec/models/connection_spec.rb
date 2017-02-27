@@ -1,32 +1,32 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe MicroservicesEngineRails3::Connection do
+describe MicroservicesEngine::Connection do
   describe 'self.get' do
     before :each do
       @resource = :example_model
       @path = [:action]
     end
     let :submit do
-      MicroservicesEngineRails3::Connection.get(@resource, @path)
+      MicroservicesEngine::Connection.get(@resource, @path)
     end
     context 'it finds a connection object with that resource' do
       before :each do
-        @connection = MicroservicesEngineRails3::Connection.create(
+        @connection = MicroservicesEngine::Connection.create(
           url: 'http://example.com',
           object: 'example_model'
         )
       end
       it 'calls the instance method get with the full path' do
         stub_request(:get, "http://example.com/example_model/action")
-        expect_any_instance_of(MicroservicesEngineRails3::Connection)
+        expect_any_instance_of(MicroservicesEngine::Connection)
           .to receive(:get).with('example_model/action', {})
         submit
       end
     end
     context 'there is no connection object with that resource' do
       before :each do
-        @connection = MicroservicesEngineRails3::Connection.create(
+        @connection = MicroservicesEngine::Connection.create(
           url: 'http://example.com',
           object: 'not_the_right_model'
         )
@@ -39,7 +39,7 @@ describe MicroservicesEngineRails3::Connection do
   
   describe 'get' do
     before :each do
-      @connection = MicroservicesEngineRails3::Connection.create(
+      @connection = MicroservicesEngine::Connection.create(
         url: 'http://example.com/',
         object: 'example_model'
       )

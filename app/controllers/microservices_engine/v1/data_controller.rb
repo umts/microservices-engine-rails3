@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require_dependency 'microservices_engine/application_controller'
 
-module MicroservicesEngineRails3
+module MicroservicesEngine
   module V1
     class DataController < ApplicationController
       def register
@@ -49,14 +49,14 @@ module MicroservicesEngineRails3
           desired = Connection.where(object: endpoint['object']).first
           if desired.present?
             desired.update_attributes(
-              name: endpoint.require('name'),
-              url: endpoint.require('url')
+              name: endpoint['name'],
+              url: endpoint['url']
             )
           else
             Connection.create(
-              name: endpoint.require(:name),
-              url: endpoint.require(:url),
-              object: endpoint.require(:object)
+              name: endpoint['name'],
+              url: endpoint['url'],
+              object: endpoint['object']
             )
           end
         end
@@ -66,12 +66,12 @@ module MicroservicesEngineRails3
       private
 
       def verify_token(token)
-        raise SecurityError, '(Stub) Invalid Token' unless MicroservicesEngineRails3.valid_token?(token)
+        raise SecurityError, '(Stub) Invalid Token' unless MicroservicesEngine.valid_token?(token)
       end
 
       def verify_build(build)
         # The build= method already has verification built-in
-        MicroservicesEngineRails3.build = build
+        MicroservicesEngine.build = build
       end
     end
   end

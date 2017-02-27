@@ -1,4 +1,4 @@
-# UMTS MicroservicesEngineRails3
+# UMTS MicroservicesEngine for Rails 3
 
 [![Build Status](https://travis-ci.org/umts/microservices-engine.svg?branch=master)](https://travis-ci.org/umts/microservices-engine)
 [![Test Coverage](https://codeclimate.com/github/umts/microservices-engine/badges/coverage.svg)](https://codeclimate.com/github/umts/microservices-engine/coverage)

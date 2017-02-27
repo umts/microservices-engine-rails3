@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'net/http'
 
-module MicroservicesEngineRails3
+module MicroservicesEngine
   class Connection < ActiveRecord::Base
     validates :url, :object, presence: true
     attr_accessible :name, :url, :object
